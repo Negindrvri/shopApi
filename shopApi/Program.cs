@@ -4,7 +4,6 @@ using shopApi.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
-var app = builder.Build();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -12,6 +11,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 //var app = builder.Build();
+var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();

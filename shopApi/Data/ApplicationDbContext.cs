@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using shopApi.Data.Efconfiguration;
 using shopApi.Entities;
 
 namespace shopApi.Data;
@@ -19,4 +21,11 @@ public class ApplicationDbContext : DbContext
     public DbSet<ProductImage> ProductImages { get; set; }
     public DbSet<Slider> Sliders { get; set; }
 
+
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserEntityConfiguration).Assembly);
+    }
 }
