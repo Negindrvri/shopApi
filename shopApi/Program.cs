@@ -13,6 +13,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //var app = builder.Build();
 var app = builder.Build();
 
+app.UseStaticFiles();
+
 app.UseSwagger();
 app.UseSwaggerUI();
 app.MapControllers();
