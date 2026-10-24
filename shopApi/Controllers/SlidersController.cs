@@ -144,4 +144,29 @@ public class SlidersController(ApplicationDbContext context,
         return NoContent();
     }
 
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(int id)
+    {
+        var slider = await context.Sliders.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (slider == null)
+        {
+            return NotFound(AppMessages.NotFoundMessage);
+        }
+
+        context.Sliders.Remove(slider);
+        await context.SaveChangesAsync();
+
+        var normalazedImagename = slider.ImageUrl.Replace('/', Path.DirectorySeparatorChar);
+        var imagePath = Path.Combine(environment.WebRootPath, normalazedImagename);
+
+        if (System.IO.File.Exists(imagePath))
+        {
+            System.IO.File.Delete(imagePath);
+        }
+
+        return NoContent();
+    }
+
+
 }
