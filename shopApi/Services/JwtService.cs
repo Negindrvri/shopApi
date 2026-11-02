@@ -1,7 +1,10 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
 using shopApi.Entities;
 using shopApi.Services;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
+using System.Security.Claims;
 using System.Text;
 
 namespace Shop.Api.Services;
@@ -17,18 +20,32 @@ public class JwtService(IConfiguration configuration) : IJwtService
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+        var claims = new List<Claim>()
+        {
+            new (ClaimTypes.NameIdentifier,user.Id.ToString())
+        };
+
+
+        foreach (var userRole in user.UserRoles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
+        }
+
+
         var token = new JwtSecurityToken
             (
               issuer: issuer,
               audience: audience,
               notBefore: DateTime.UtcNow,
               expires: DateTime.UtcNow.AddHours(4),
-              signingCredentials: credentials
-            //ToDo: Add Claims
+              signingCredentials: credentials,
+               //ToDo: Add Claims
+              //signingCredentials: credentials,
+              claims: claims
+
             );
 
         var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
         return jwt;
 
     }

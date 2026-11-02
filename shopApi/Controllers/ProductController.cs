@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using shopApi.Data;
@@ -8,6 +9,7 @@ using shopApi.Entities;
 
 namespace shopApi.Controllers;
 
+[Authorize(Roles = "ADMIN")]
 [Route("api/[controller]")]
 [ApiController]
 public class ProductsController(ApplicationDbContext context,
