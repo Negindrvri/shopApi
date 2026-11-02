@@ -23,6 +23,9 @@ namespace shopApi.Data.Efconfiguration
              .HasMaxLength(11)
              .IsRequired();
 
+            builder.Property(x => x.Username)
+            .HasMaxLength(10)
+            .IsRequired();
 
         }
     }
