@@ -77,6 +77,37 @@ namespace shopApi.Migrations
                     b.ToTable("ProductCategory", (string)null);
                 });
 
+            modelBuilder.Entity("shopApi.Entities.ProductComment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("DateCreate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ProductComments", (string)null);
+                });
+
             modelBuilder.Entity("shopApi.Entities.ProductImage", b =>
                 {
                     b.Property<int>("Id")
@@ -188,7 +219,8 @@ namespace shopApi.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("Id");
 
@@ -241,6 +273,25 @@ namespace shopApi.Migrations
                     b.Navigation("Parent");
                 });
 
+            modelBuilder.Entity("shopApi.Entities.ProductComment", b =>
+                {
+                    b.HasOne("shopApi.Entities.Product", "Product")
+                        .WithMany("Comments")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("shopApi.Entities.User", "User")
+                        .WithMany("ProductComments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("shopApi.Entities.ProductImage", b =>
                 {
                     b.HasOne("shopApi.Entities.Product", "Product")
@@ -273,6 +324,8 @@ namespace shopApi.Migrations
 
             modelBuilder.Entity("shopApi.Entities.Product", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Images");
                 });
 
@@ -290,6 +343,8 @@ namespace shopApi.Migrations
 
             modelBuilder.Entity("shopApi.Entities.User", b =>
                 {
+                    b.Navigation("ProductComments");
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618

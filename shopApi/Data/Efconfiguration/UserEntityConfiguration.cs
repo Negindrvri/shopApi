@@ -27,6 +27,11 @@ namespace shopApi.Data.Efconfiguration
             .HasMaxLength(10)
             .IsRequired();
 
+            builder.HasMany(x => x.ProductComments)
+          .WithOne(x => x.User)
+          .HasForeignKey(x => x.UserId);
+
+
         }
     }
 }
